@@ -1,0 +1,12 @@
+For 5 + 3
+guessed: 1, answer : 8
+
+For 1 + 1
+guessed: 1, answer : 2
+
+For 3 + 2
+guessed: 1, answer : 5
+
+For 4 + 5
+guessed: 1, answer : 9
+
