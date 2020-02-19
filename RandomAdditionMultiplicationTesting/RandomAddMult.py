@@ -23,7 +23,7 @@ if not os.path.exists('./results'):
 
 file_path = './results' + new_file_name
 
-limit = 5
+limit = 12
 
 with open(file_path, 'w') as file:
     # initiates the test
