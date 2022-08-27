@@ -1,19 +1,20 @@
-# TODO record results
-
 import random
 import sys
 from datetime import date
 import os
 
-# chooses the mode, either addition or multiplication
-mode_input = input("Choose a testing mode: add(ition) or mult(iplication)")
+while True:
+    # chooses the mode, either addition or multiplication
+    mode_input = input("Choose a testing mode: add(ition) or mult(iplication)")
 
-if mode_input in 'addition':
-    mode = '+'
-elif mode_input in 'multiplication':
-    mode = '*'
-else:
-    sys.exit("Invalid Mode. Must be either add(ition) or mult(iplication).")
+    if mode_input in 'addition':
+        mode = '+'
+        break
+    elif mode_input in 'multiplication':
+        mode = '*'
+        break
+    else:
+        print("Invalid Mode. Must be either add(ition) or mult(iplication).")
 
 # creates a file to write the results of the test
 new_file_name = '{}_{}_test.txt'.format(str(date.today()), mode_input)
@@ -35,8 +36,6 @@ with open(file_path, 'w') as file:
 
     random.shuffle(operand_pairs)
 
-    print(operand_pairs)
-
     for current_pair in operand_pairs:
 
         correct_answer = 0
@@ -47,7 +46,13 @@ with open(file_path, 'w') as file:
             correct_answer = current_pair[0] * current_pair[1]
 
         question = '{} {} {}'.format(current_pair[0], mode, current_pair[1])
-        guess = int(input(question + ' = '))
+
+        while True:
+            try:
+                guess = int(input(question + ' = '))
+                break
+            except ValueError:
+                print("Invalid input, try again.")
 
         if guess == correct_answer:
             print("Correct")
