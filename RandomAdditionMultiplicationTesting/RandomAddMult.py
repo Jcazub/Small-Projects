@@ -1,30 +1,40 @@
 import random
-import sys
 from datetime import date
 import os
 
-while True:
-    # chooses the mode, either addition or multiplication
-    mode_input = input("Choose a testing mode: add(ition) or mult(iplication)")
+from CalculationMode import CalculationMode
 
-    if mode_input in 'addition':
-        mode = '+'
-        break
-    elif mode_input in 'multiplication':
-        mode = '*'
-        break
-    else:
-        print("Invalid Mode. Must be either add(ition) or mult(iplication).")
+
+def getCalculationMode(mode: str):
+    mode = mode.lower()
+    if mode in CalculationMode.ADDITION:
+        return CalculationMode.ADDITION
+    elif mode in CalculationMode.MULTIPLICATION:
+        return CalculationMode.MULTIPLICATION
+    elif mode in CalculationMode.SQUARES:
+        return CalculationMode.SQUARES
+    return None
+
+
+# chooses the mode, either addition or multiplication
+def chooseCalculationMode() -> CalculationMode:
+    mode = ''
+    while not mode:
+        mode_user_input = input("Choose a testing mode: add(ition) or mult(iplication)")
+        mode = getCalculationMode(mode_user_input)
+    return mode
+
 
 # creates a file to write the results of the test
 new_file_name = '{}_{}_test.txt'.format(str(date.today()), mode_input)
-
 if not os.path.exists('./results'):
     os.mkdir('./results')
-
-file_path = './results' + new_file_name
+file_path = './results/' + new_file_name
 
 limit = 12
+
+def getFile():
+    #
 
 with open(file_path, 'w') as file:
     # initiates the test
