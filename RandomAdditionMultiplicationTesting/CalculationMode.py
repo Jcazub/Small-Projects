@@ -9,14 +9,14 @@ class CalculationMode(Enum):
     SQUARES = 'squares'
 
     def getSign(self):
-        if self.name == self.ADDITION:
+        if self == CalculationMode.ADDITION:
             return '+'
-        if self.name == self.SUBTRACTION:
+        if self == CalculationMode.SUBTRACTION:
             return '-'
-        if self.name == self.MULTIPLICATION:
+        if self == CalculationMode.MULTIPLICATION:
             return '*'
-        if self.name == self.DIVISION:
+        if self == CalculationMode.DIVISION:
             return '//'
-        if self.name == self.SQUARES:
+        if self == CalculationMode.SQUARES:
             return '^'
         return None
