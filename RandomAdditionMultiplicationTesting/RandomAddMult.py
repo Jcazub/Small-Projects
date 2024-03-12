@@ -1,49 +1,55 @@
+import io
 import random
 from datetime import date
 import os
 from typing import List
 
 from CalculationMode import CalculationMode
-from GameMode import GameMode
+from Calculator import Calculator
+from GameSettings import GameSettings
+from Result import Result
 
 
 def runGame():
-    playerInput = chooseCalculationMode()
+    calculationMode = chooseCalculationMode()
     filename = getFileName()
-    gameMode = GameMode(playerInput, filename, 12)
-    startGameMode(gameMode)
+    gameSettings = GameSettings(calculationMode, filename, 12)
+    startGame(gameSettings)
 
 
 # initiates the test
-def startGameMode(gameMode: GameMode):
-    with open(gameMode.filename, 'a') as file:
-        pairs = getRandomizedOperands(gameMode)
+def startGame(gameSettings: GameSettings):
+    with open(gameSettings.filename, 'a') as file:
+        pairs = getRandomizedOperands(gameSettings)
         for current_pair in pairs:
+            result = runCalculationSession(current_pair, gameSettings.mode)
+            printResults(result, file)
 
-            correct_answer = 0
-            if gameMode.mode == CalculationMode.ADDITION:
-                correct_answer = current_pair[0] + current_pair[1]
-            elif gameMode.mode == CalculationMode.MULTIPLICATION or gameMode.mode == CalculationMode.SQUARES:
-                correct_answer = current_pair[0] * current_pair[1]
-            elif gameMode.mode == CalculationMode.SUBTRACTION:
-                correct_answer = current_pair[0] - current_pair[1]
-            elif gameMode.mode == CalculationMode.DIVISION:
-                correct_answer = current_pair[0] // current_pair[1]
 
-            question = '{} {} {}'.format(current_pair[0], gameMode.mode.getSign(), current_pair[1])
-            while True:
-                try:
-                    guess = int(input(question + ' = '))
-                    break
-                except ValueError:
-                    print("Invalid input, try again.")
+def runCalculationSession(pair: tuple, mode: CalculationMode):
+    answer = Calculator.calculate(pair, mode)
+    question = Calculator.getQuestion(pair, mode)
+    guess = getPlayerGuess(question)
+    return Result(question, answer, guess)
 
-            if guess == correct_answer:
-                print("Correct")
-            else:
-                print("Incorrect. Correct answer was " + str(correct_answer))
-                file.write('{} For {}: guessed: {}, answer : {}\n'.format(
-                    date.today(), question, guess, correct_answer))
+
+def printResults(result: Result, file):
+    if result.guess == result.answer:
+        print("Correct")
+    else:
+        print("Incorrect. Correct answer was " + str(result.answer))
+        file.write('{} For {}: guessed: {}, answer : {}\n'.format(
+            date.today(), result.question, result.guess, result.answer))
+
+
+def getPlayerGuess(question: str):
+    while True:
+        try:
+            guess = int(input(question))
+            break
+        except ValueError:
+            print("Invalid input, try again.")
+    return guess
 
 
 # chooses the mode, either addition or multiplication
@@ -51,23 +57,8 @@ def chooseCalculationMode() -> CalculationMode:
     mode = ''
     while not mode:
         mode_user_input = input("Choose a testing mode: (a)ddition or (m)ultiplication: ")
-        mode = getCalculationMode(mode_user_input)
+        mode = CalculationMode.getCalculationMode(mode_user_input)
     return mode
-
-
-def getCalculationMode(mode: str):
-    mode = mode.lower()
-    if mode == 'a':
-        return CalculationMode.ADDITION
-    elif mode == 's':
-        return CalculationMode.SUBTRACTION
-    elif mode == 'm':
-        return CalculationMode.MULTIPLICATION
-    elif mode == 'x':
-        return CalculationMode.SQUARES
-    elif mode == 'd':
-        return CalculationMode.DIVISION
-    return None
 
 
 def getFileName():
@@ -75,14 +66,14 @@ def getFileName():
 
 
 # generates all combinations of numbers from 1 till the limit
-def getRandomizedOperands(gameMode: GameMode) -> List[tuple]:
+def getRandomizedOperands(gameSettings: GameSettings) -> List[tuple]:
     operand_pairs = []
-    if gameMode.mode == CalculationMode.SQUARES:
-        for i in range(gameMode.numberLimit):
+    if gameSettings.mode == CalculationMode.SQUARES:
+        for i in range(gameSettings.numberLimit):
             operand_pairs.append((i + 1, i + 1))
     else:
-        for i in range(gameMode.numberLimit):
-            for j in range(gameMode.numberLimit):
+        for i in range(gameSettings.numberLimit):
+            for j in range(gameSettings.numberLimit):
                 operand_pairs.append((i + 1, j + 1))
 
     random.shuffle(operand_pairs)
