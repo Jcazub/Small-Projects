@@ -8,7 +8,7 @@ class Calculator:
         pass
 
     @classmethod
-    def getQuestion(cls, operands: tuple, mode: CalculationMode):
+    def generateExpression(cls, operands: tuple, mode: CalculationMode):
         return '{} {} {} = '.format(operands[0], mode.getSign(), operands[1])
 
     @classmethod

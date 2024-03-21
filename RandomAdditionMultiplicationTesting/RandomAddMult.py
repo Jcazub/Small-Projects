@@ -28,7 +28,7 @@ def startGame(gameSettings: GameSettings):
 
 def runCalculationSession(pair: tuple, mode: CalculationMode):
     answer = Calculator.calculate(pair, mode)
-    question = Calculator.getQuestion(pair, mode)
+    question = Calculator.generateExpression(pair, mode)
     guess = getPlayerGuess(question)
     return Result(question, answer, guess)
 
@@ -45,7 +45,9 @@ def printResults(result: Result, file):
 def getPlayerGuess(question: str):
     while True:
         try:
+            # start clock
             guess = int(input(question))
+            # stop clock
             break
         except ValueError:
             print("Invalid input, try again.")
