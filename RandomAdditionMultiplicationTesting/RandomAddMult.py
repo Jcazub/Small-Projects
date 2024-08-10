@@ -1,7 +1,5 @@
-import io
 import random
 from datetime import date
-import os
 from typing import List
 
 from CalculationMode import CalculationMode
@@ -20,6 +18,8 @@ def runGame():
 # initiates the test
 def startGame(gameSettings: GameSettings):
     with open(gameSettings.filename, 'a') as file:
+        # hardcoded change for squares
+        gameSettings.numberLimit = 30 if gameSettings.mode == CalculationMode.SQUARES else gameSettings.numberLimit
         pairs = getRandomizedOperands(gameSettings)
         for current_pair in pairs:
             result = runCalculationSession(current_pair, gameSettings.mode)
