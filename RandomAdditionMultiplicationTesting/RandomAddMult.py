@@ -58,7 +58,8 @@ def getPlayerGuess(question: str):
 def chooseCalculationMode() -> CalculationMode:
     mode = ''
     while not mode:
-        mode_user_input = input("Choose a testing mode: (a)ddition or (m)ultiplication: ")
+        mode_user_input = input("Choose a testing mode: (a)ddition, (s)ubtraction, (m)ultiplication, (d)ivision, "
+                                "or (sq)uares: ")
         mode = CalculationMode.getCalculationMode(mode_user_input)
     return mode
 
@@ -76,10 +77,12 @@ def getRandomizedOperands(gameSettings: GameSettings) -> List[tuple]:
     else:
         for i in range(gameSettings.numberLimit):
             for j in range(gameSettings.numberLimit):
-                operand_pairs.append((i + 1, j + 1))
-
+                if gameSettings.mode == CalculationMode.DIVISION:
+                    product = (i + 1) * (j + 1)
+                    operand_pairs.append((product, (i + 1)))
+                else:
+                    operand_pairs.append((i + 1, j + 1))
     random.shuffle(operand_pairs)
-
     return operand_pairs
 
 

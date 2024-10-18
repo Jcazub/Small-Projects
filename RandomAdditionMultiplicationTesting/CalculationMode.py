@@ -29,8 +29,8 @@ class CalculationMode(Enum):
             return CalculationMode.SUBTRACTION
         elif modeIdentifier == 'm':
             return CalculationMode.MULTIPLICATION
-        elif modeIdentifier == 'x':
-            return CalculationMode.SQUARES
         elif modeIdentifier == 'd':
             return CalculationMode.DIVISION
+        elif modeIdentifier == 'sq':
+            return CalculationMode.SQUARES
         return None
